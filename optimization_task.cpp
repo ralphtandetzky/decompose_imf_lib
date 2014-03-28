@@ -17,6 +17,10 @@ namespace dimf
 
 struct OptimizationTask::Impl
 {
+    Impl()
+        : worker{1} // only one worker thread
+    {}
+
     /////////////////////////////////
     // Data shared between threads //
     /////////////////////////////////
