@@ -45,6 +45,7 @@ OptimizationTask::OptimizationTask()
 
 OptimizationTask::~OptimizationTask()
 {
+    cancel();
 }
 
 
