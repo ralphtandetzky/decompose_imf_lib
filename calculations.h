@@ -3,6 +3,9 @@
 #include <complex>
 #include <vector>
 
+namespace dimf
+{
+
 std::vector<std::complex<double>> groupPairsToComplex(
         const std::vector<double> & pairsOfReals );
 
@@ -43,3 +46,5 @@ std::vector<double>
 
 std::vector<double> getSamplesFromParams(
         std::vector<double> v , size_t nSamples );
+
+} // namespace dimf

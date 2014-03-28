@@ -1,4 +1,4 @@
-#include "calculations.h"
+#include "decompose_imf_lib/calculations.h"
 
 #include "cpp_utils/math_constants.h"
 #include "cpp_utils/more_algorithms.h"
@@ -8,6 +8,8 @@
 #include <complex>
 #include <vector>
 
+namespace dimf
+{
 
 std::vector<std::complex<double>>
     groupPairsToComplex(
@@ -243,3 +245,5 @@ std::vector<double> getSamplesFromParams(
 
     return v;
 }
+
+} // namespace dimf
