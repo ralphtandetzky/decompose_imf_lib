@@ -30,16 +30,16 @@ struct OptimizationParams
     double tauDevUnits{};
     std::string preprocessing{};
     std::string interprocessing{};
+    double xIntervalWidth{};
     std::function<
             std::vector<std::complex<double>>(
                 const std::vector<double> &)> initializer{};
-    double xIntervalWidth{};
     std::function<void(
             const std::vector<double> & bestParams
             , double cost
             , size_t nSamples
             , size_t nIter
-            , const std::vector<double> & f )> receiveBestFit;
+            , const std::vector<double> & f )> receiveBestFit{};
 };
 
 /// @brief An active object performing imf decomposition.
