@@ -8,9 +8,11 @@ DEPENDPATH += .
 INCLUDEPATH += ..
 
 # Input
-HEADERS += calculations.h optimization_task.h processing.h
+HEADERS += calculations.h optimization_task.h processing.h \
+    file_io.h
 
-SOURCES += calculations.cpp optimization_task.cpp processing.cpp
+SOURCES += calculations.cpp optimization_task.cpp processing.cpp \
+    file_io.cpp
 
 LIBS += -L/usr/lib/ -lopencv_core -lopencv_imgproc -lopencv_highgui \
 	-L../cpp_utils -lcpp_utils \
