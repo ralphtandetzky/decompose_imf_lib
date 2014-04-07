@@ -82,6 +82,9 @@ void OptimizationTask::restart( OptimizationParams params )
             const auto nSamples = f.size();
 
             // calculate an initial approximation and swarm
+            CU_ASSERT_THROW( params.initializer,
+                             "The algorithm for the initial "
+                             "approximation has not been specified." );
             const auto initApprox = params.initializer(f);
 
             // calculate base with equidistant center points of logistic functions
