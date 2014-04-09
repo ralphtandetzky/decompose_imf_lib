@@ -13,9 +13,16 @@
 namespace dimf
 {
 
+enum class ContinueOption
+{
+    Continue,
+    Cancel,
+    NextImf
+};
+
 /// Contains all the parameters needed for an imf decomposition.
 struct OptimizationParams
-{
+{    
     std::vector<double> samples{};
     size_t swarmSize{};
     double angleDevDegs{};
@@ -40,7 +47,7 @@ struct OptimizationParams
             , size_t nSamples
             , size_t nIter
             , const std::vector<double> & f )> receiveBestFit{};
-    std::function<bool(size_t nIter)> shallCancel{};
+    std::function<ContinueOption(size_t nIter)> howToContinue{};
 };
 
 template <typename F>
@@ -63,9 +70,13 @@ void iterateMembers( OptimizationParams & params, F && f )
     f( params.xIntervalWidth , "xIntervalWidth"  );
     f( params.initializer    , "initializer"     );
     f( params.receiveBestFit , "receiveBestFit"  );
-    f( params.shallCancel    , "shallCancel"     );
+    f( params.howToContinue  , "howToContinue"   );
 }
 
+
+void runOptimization( const OptimizationParams & params );
+
+/*
 /// @brief An active object performing imf decomposition.
 ///
 /// All methods run asynchroneously.
@@ -75,13 +86,13 @@ public:
     OptimizationTask();
     ~OptimizationTask();
 
-    void restart( OptimizationParams params );
-    void cancel();
-    void continueWithNextImf();
+    void start( OptimizationParams params );
+//    void cancel();
+//    void continueWithNextImf();
 
 private:
     struct Impl;
     std::unique_ptr<Impl> m;
 };
-
+*/
 } // namespace dimf
