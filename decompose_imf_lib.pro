@@ -4,7 +4,7 @@ QMAKE_CXXFLAGS += -std=c++11 -pedantic
 
 TEMPLATE = lib
 CONFIG += staticlib create_prl c++11 link_prl
-DEPENDPATH += .
+DEPENDPATH += . ../cpp_utils/ ../qt_utils/
 INCLUDEPATH += ..
 
 # Input
