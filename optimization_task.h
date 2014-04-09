@@ -42,6 +42,28 @@ struct OptimizationParams
             , const std::vector<double> & f )> receiveBestFit{};
 };
 
+template <typename F>
+void iterateMembers( OptimizationParams & params, F && f )
+{
+    f( params.samples        , "samples"         );
+    f( params.swarmSize      , "swarmSize"       );
+    f( params.angleDevDegs   , "angleDevDegs"    );
+    f( params.amplitudeDev   , "amplitudeDev"    );
+    f( params.crossOverProb  , "crossOverProb"   );
+    f( params.diffWeight     , "diffWeight"      );
+    f( params.nParams        , "nParams"         );
+    f( params.initSigmaUnits , "initSigmaUnits"  );
+    f( params.initTauUnits   , "initTauUnits"    );
+    f( params.nodeDevUnits   , "nodeDevUnits"    );
+    f( params.sigmaDevUnits  , "sigmaDevUnits"   );
+    f( params.tauDevUnits    , "tauDevUnits"     );
+    f( params.preprocessing  , "preprocessing"   );
+    f( params.interprocessing, "interprocessing" );
+    f( params.xIntervalWidth , "xIntervalWidth"  );
+    f( params.initializer    , "initializer"     );
+    f( params.receiveBestFit , "receiveBestFit"  );
+}
+
 /// @brief An active object performing imf decomposition.
 ///
 /// All methods run asynchroneously.
