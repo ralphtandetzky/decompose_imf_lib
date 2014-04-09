@@ -32,7 +32,7 @@ struct OptimizationParams
     std::string interprocessing{};
     double xIntervalWidth{};
     std::function<
-            std::vector<std::complex<double>>(
+            std::vector<std::complex<double> >(
                 const std::vector<double> &)> initializer{};
     std::function<void(
             const std::vector<double> & bestParams
@@ -40,6 +40,7 @@ struct OptimizationParams
             , size_t nSamples
             , size_t nIter
             , const std::vector<double> & f )> receiveBestFit{};
+    std::function<bool(size_t nIter)> shallCancel{};
 };
 
 template <typename F>
@@ -62,6 +63,7 @@ void iterateMembers( OptimizationParams & params, F && f )
     f( params.xIntervalWidth , "xIntervalWidth"  );
     f( params.initializer    , "initializer"     );
     f( params.receiveBestFit , "receiveBestFit"  );
+    f( params.shallCancel    , "shallCancel"     );
 }
 
 /// @brief An active object performing imf decomposition.
