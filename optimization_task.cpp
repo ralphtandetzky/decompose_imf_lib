@@ -40,6 +40,9 @@ std::vector<std::vector<double> > runOptimization(
         const auto oldImf = currentImf;
         std::cout << "Optimizing IMF " << currentImf << "." << std::endl;
         auto f = samples;
+        f = processSamples( f,
+                params.interprocessing,
+                processingFunctions );
         for ( auto i = size_t(); i < imfs.size(); ++i )
         {
             if ( i == currentImf )
@@ -47,9 +50,6 @@ std::vector<std::vector<double> > runOptimization(
             const auto & imf = imfs[i];
             cu::subAssign( begin(f), end(f), 1., begin(imf), end(imf) );
         }
-        f = processSamples( f,
-                params.interprocessing,
-                processingFunctions );
         const auto nSamples = f.size();
 
         // calculate an initial approximation and swarm
