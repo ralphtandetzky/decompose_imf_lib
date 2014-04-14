@@ -13,13 +13,6 @@
 namespace dimf
 {
 
-enum class ContinueOption
-{
-    Continue,
-    Cancel,
-    NextImf
-};
-
 /// Contains all the parameters needed for an imf decomposition.
 struct OptimizationParams
 {    
@@ -47,7 +40,9 @@ struct OptimizationParams
             , size_t nSamples
             , size_t nIter
             , const std::vector<double> & f )> receiveBestFit{};
-    std::function<ContinueOption(size_t nIter)> howToContinue{};
+    // returns ~size_t{0}, if the optimization shall be cancelled, otherwise the
+    // index if the imf to continue with.
+    std::function<size_t(size_t nIter)> howToContinue{};
 };
 
 template <typename F>

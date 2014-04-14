@@ -18,17 +18,29 @@ namespace dimf
 //void OptimizationTask::start( OptimizationParams params )
 void runOptimization( const OptimizationParams & params )
 {
-    auto f = params.samples;
     using cu::pi;
 
     auto done = false;
+    auto currentImf = size_t{0};
 
     const auto processingFunctions = createProcessingFunctions();
-    auto residue = processSamples( f, params.preprocessing, processingFunctions );
+    const auto samples = processSamples(
+                params.samples,
+                params.preprocessing,
+                processingFunctions );
+    auto imfs = std::vector<std::vector<double> >{};
+
+    // This variable is shared between 'shallTerminate' and 'sendBestFit'.
+    auto nIter = 0;
 
     while ( !done )
     {
-        f = processSamples( residue, params.interprocessing, processingFunctions );
+        const auto oldImf = currentImf;
+        std::cout << "Optimizing IMF " << currentImf << "." << std::endl;
+        auto f = samples;
+        for( const auto & imf : imfs )
+            cu::subAssign( begin(f), end(f), 1., begin(imf), end(imf) );
+        f = processSamples( f, params.interprocessing, processingFunctions );
         const auto nSamples = f.size();
 
         // calculate an initial approximation and swarm
@@ -110,28 +122,21 @@ void runOptimization( const OptimizationParams & params )
                 getSamplesFromParams( std::move(v), nSamples ) );
         };
 
-        // This variable is shared between 'shallTerminate' and 'sendBestFit'.
-        auto nIter = 0;
-
         // function which returns whether the
         // optimization algorithm shall terminate.
         const auto shallTerminate = [&]( const decltype(swarm) & )-> bool
         {
             ++nIter;
-            switch ( params.howToContinue( nIter ) )
+            const auto nextImf = params.howToContinue( nIter );
+            if ( nextImf == ~size_t{0} )
             {
-            case ContinueOption::Cancel:
                 done = true;
                 return true;
-            case ContinueOption::Continue:
-                return false;
-            case ContinueOption::NextImf:
-                return true;
-            default:
-                CU_ASSERT_THROW( false, "Invalid switch case." );
-                return false;
             }
-
+            if ( nextImf == currentImf )
+                return false;
+            currentImf = nextImf;
+            return true;
         };
 
         // function which is called by the optimization algorithm
@@ -151,8 +156,13 @@ void runOptimization( const OptimizationParams & params )
 
         const auto bestImf = calculateImfFromPairsOfReals(
                     getSamplesFromParams( bestParams, nSamples ) );
-        cu::subAssign( begin(residue), end(residue), 1.,
-                       begin(bestImf), end(bestImf) );
+        if ( oldImf >= imfs.size() )
+        {
+            CU_ASSERT_THROW( oldImf == imfs.size(),
+                "Invalid IMF index. Have some indexes been skipped?" );
+            imfs.push_back({});
+        }
+        imfs[oldImf] = bestImf;
     } // while loop
 }
 
