@@ -69,25 +69,7 @@ void iterateMembers( OptimizationParams & params, F && f )
 }
 
 
-void runOptimization( const OptimizationParams & params );
+std::vector<std::vector<double> > runOptimization(
+        const OptimizationParams & params );
 
-/*
-/// @brief An active object performing imf decomposition.
-///
-/// All methods run asynchroneously.
-class OptimizationTask
-{
-public:
-    OptimizationTask();
-    ~OptimizationTask();
-
-    void start( OptimizationParams params );
-//    void cancel();
-//    void continueWithNextImf();
-
-private:
-    struct Impl;
-    std::unique_ptr<Impl> m;
-};
-*/
 } // namespace dimf

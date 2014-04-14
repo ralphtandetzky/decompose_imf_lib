@@ -16,7 +16,8 @@ namespace dimf
 {
 
 //void OptimizationTask::start( OptimizationParams params )
-void runOptimization( const OptimizationParams & params )
+std::vector<std::vector<double> > runOptimization(
+        const OptimizationParams & params )
 {
     using cu::pi;
 
@@ -164,6 +165,7 @@ void runOptimization( const OptimizationParams & params )
         }
         imfs[oldImf] = bestImf;
     } // while loop
+    return imfs;
 }
 
 } // namespace dimf
