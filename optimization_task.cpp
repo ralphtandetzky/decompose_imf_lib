@@ -30,6 +30,7 @@ std::vector<std::vector<double> > runOptimization(
                 params.preprocessing,
                 processingFunctions );
     auto imfs = std::vector<std::vector<double> >{};
+    auto bestParamSets = std::vector<std::vector<double> >{};
 
     // This variable is shared between 'shallTerminate' and 'sendBestFit'.
     auto nIter = 0;
@@ -39,9 +40,16 @@ std::vector<std::vector<double> > runOptimization(
         const auto oldImf = currentImf;
         std::cout << "Optimizing IMF " << currentImf << "." << std::endl;
         auto f = samples;
-        for( const auto & imf : imfs )
+        for ( auto i = size_t(); i < imfs.size(); ++i )
+        {
+            if ( i == currentImf )
+                continue;
+            const auto & imf = imfs[i];
             cu::subAssign( begin(f), end(f), 1., begin(imf), end(imf) );
-        f = processSamples( f, params.interprocessing, processingFunctions );
+        }
+        f = processSamples( f,
+                params.interprocessing,
+                processingFunctions );
         const auto nSamples = f.size();
 
         // calculate an initial approximation and swarm
@@ -88,7 +96,7 @@ std::vector<std::vector<double> > runOptimization(
         const auto bestApproxMat =
                 cv::Mat{ invLogisticBase * initApproxMat };
 
-        auto swarm = std::vector<std::vector<double>>( params.swarmSize );
+        auto swarm = std::vector<std::vector<double> >( params.swarmSize );
         auto rng = std::mt19937{};
         {
             auto normal_dist = std::normal_distribution<>{};
@@ -114,6 +122,8 @@ std::vector<std::vector<double> > runOptimization(
                 x.push_back( initSigma + sigmaDev*normal_dist(rng) );
                 x.push_back( initTau + tauDev*normal_dist(rng) );
             }
+            if ( currentImf < bestParamSets.size() )
+                swarm.front() = bestParamSets.at(currentImf);
         }
 
         // cost function for optimization
@@ -162,8 +172,10 @@ std::vector<std::vector<double> > runOptimization(
             CU_ASSERT_THROW( oldImf == imfs.size(),
                 "Invalid IMF index. Have some indexes been skipped?" );
             imfs.push_back({});
+            bestParamSets.push_back({});
         }
         imfs[oldImf] = bestImf;
+        bestParamSets[oldImf] = bestParams;
     } // while loop
     return imfs;
 }
