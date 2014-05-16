@@ -28,6 +28,7 @@ struct OptimizationParams
     double nodeDevUnits{};
     double sigmaDevUnits{};
     double tauDevUnits{};
+    double freqSwingFactor{1};
     std::string preprocessing{};
     std::string interprocessing{};
     double xIntervalWidth{};
@@ -60,6 +61,7 @@ void iterateMembers( OptimizationParams & params, F && f )
     f( params.nodeDevUnits   , "nodeDevUnits"    );
     f( params.sigmaDevUnits  , "sigmaDevUnits"   );
     f( params.tauDevUnits    , "tauDevUnits"     );
+    f( params.freqSwingFactor, "freqSwingFactor" );
     f( params.preprocessing  , "preprocessing"   );
     f( params.interprocessing, "interprocessing" );
     f( params.xIntervalWidth , "xIntervalWidth"  );

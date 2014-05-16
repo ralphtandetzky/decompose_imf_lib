@@ -76,14 +76,15 @@ double sumOfSquaresOfDifference(
 
 
 double costFunction( const std::vector<double> & f,
-                     const std::vector<double> & pairsOfReals )
+                     const std::vector<double> & pairsOfReals,
+                     double frequencySwingFactor )
 {
     auto sigma_seq = groupPairsToComplex( pairsOfReals );
 
     return sumOfSquaresOfDifference( f,
         calculateImfFromSigmaFunction(
             calculateSigmaFunctionFromSigmaSequence(sigma_seq) ) )
-        + boundaryCondition( sigma_seq );
+        + boundaryCondition( sigma_seq, frequencySwingFactor );
 }
 
 
@@ -98,7 +99,8 @@ std::vector<std::complex<double>>
 }
 
 
-double boundaryCondition( std::vector<std::complex<double>> sigma_seq )
+double boundaryCondition( std::vector<std::complex<double>> sigma_seq
+                          , double frequencySwingFactor )
 {
     using cu::pi;
     auto tau = derive( std::move(sigma_seq) );
@@ -108,7 +110,7 @@ double boundaryCondition( std::vector<std::complex<double>> sigma_seq )
     for ( size_t i = 1; i < tau.size(); ++i )
     {
         const auto lhs = abs(tau[i]-tau[i-1]);
-        const auto rhs = cu::sqr( std::max(0.,
+        const auto rhs = frequencySwingFactor*cu::sqr( std::max(0.,
             std::min(tau[i].imag(),tau[i-1].imag()) ) );
         if ( lhs > rhs )
             result += lhs-rhs+1;

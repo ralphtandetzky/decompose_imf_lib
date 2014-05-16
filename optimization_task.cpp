@@ -127,10 +127,11 @@ std::vector<std::vector<double> > runOptimization(
         }
 
         // cost function for optimization
-        const auto cost = [&f, nSamples]( std::vector<double> v ) -> double
+        const auto cost = [&f, nSamples, &params]( std::vector<double> v ) -> double
         {
             return costFunction( f,
-                getSamplesFromParams( std::move(v), nSamples ) );
+                getSamplesFromParams( std::move(v), nSamples ),
+                params.freqSwingFactor );
         };
 
         // function which returns whether the

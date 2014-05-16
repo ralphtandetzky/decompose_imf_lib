@@ -23,12 +23,14 @@ double sumOfSquaresOfDifference(
         const std::vector<double> & rhs );
 
 double costFunction( const std::vector<double> & f,
-                     const std::vector<double> & pairsOfReals );
+                     const std::vector<double> & pairsOfReals,
+                     double frequencySwingFactor );
 
 std::vector<std::complex<double>>
     derive( std::vector<std::complex<double>> f );
 
-double boundaryCondition( std::vector<std::complex<double>> sigma_seq );
+double boundaryCondition(std::vector<std::complex<double>> sigma_seq
+                         , double frequencySwingFactor);
 
 std::vector<std::complex<double>>
     getInitialApproximationByInterpolatingZeros(
