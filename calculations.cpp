@@ -1,5 +1,6 @@
 #include "decompose_imf_lib/calculations.h"
 
+#include "cpp_utils/fft.h"
 #include "cpp_utils/math_constants.h"
 #include "cpp_utils/more_algorithms.h"
 
@@ -126,12 +127,12 @@ double boundaryCondition( std::vector<std::complex<double>> sigma_seq
 }
 
 
-std::vector<std::complex<double>> getInitialApproximationByInterpolatingZeros(
+std::vector<std::complex<double> > getInitialApproximationByInterpolatingZeros(
     const std::vector<double> & f )
 {
     using cu::pi;
 
-    std::vector<std::complex<double>> result( f.size()+1, 0 );
+    std::vector<std::complex<double> > result( f.size()+1, 0 );
     if ( f.empty() )
     {
         return result;
@@ -178,6 +179,25 @@ std::vector<std::complex<double>> getInitialApproximationByInterpolatingZeros(
                              (result.size()-zeros.back())) );
     }
 
+    return result;
+}
+
+
+std::vector<std::complex<double> > getInitialApproximationByFourierComponent(
+    const std::vector<double> & f )
+{
+    using C = std::complex<double>;
+    std::vector<std::complex<double> > result( f.size()+1, 0 );
+    std::vector<C> fc( begin(f), end(f) );
+    const auto fft = cu::fft( fc );
+    const auto maxIdx = std::max_element(
+                begin(fft), begin(fft)+fft.size()/2,
+                []( C lhs, C rhs ){ return abs(lhs) < abs(rhs); } )
+            - begin(fft);
+    const auto rad = arg( fft[maxIdx] );
+    const auto inc = 2*cu::pi*maxIdx/f.size();
+    for ( size_t i = 0; i < result.size(); ++i )
+        result[i] = C( 0, (i-0.5)*inc - rad + cu::pi/2 );
     return result;
 }
 
