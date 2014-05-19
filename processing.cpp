@@ -15,10 +15,7 @@ namespace dimf
 std::vector<double> processSamples(
         std::vector<double> samples
         , const std::string & instructions
-        , const std::map<std::string,
-            std::function<std::vector<double>(
-                const std::vector<double> &,
-                std::vector<double>)> > & functions
+        , const ProcessingFunctions & functions
         )
 {
     const auto processing =
@@ -76,17 +73,9 @@ std::vector<double> processSamples(
 }
 
 
-std::map<std::string,
-    std::function<std::vector<double>(
-        const std::vector<double> &,
-        std::vector<double>
-    )>> createProcessingFunctions()
+ProcessingFunctions createProcessingFunctions()
 {
-    auto functions = std::map<std::string,
-        std::function<std::vector<double>(
-            const std::vector<double> &,
-            std::vector<double>
-        )>>{};
+    auto functions = ProcessingFunctions{};
 
     functions["box_filter"] =
         []( const std::vector<double> & args, std::vector<double> samples )

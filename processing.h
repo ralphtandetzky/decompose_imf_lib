@@ -13,20 +13,26 @@
 namespace dimf
 {
 
+using ProcessingFunctions = std::map<std::string,
+    std::function<std::vector<double>(
+        const std::vector<double> &,
+        std::vector<double>)> >;
+
 std::vector<double> processSamples(
         std::vector<double> samples
         , const std::string & instructions
-        , const std::map<std::string,
-            std::function<std::vector<double>(
-                const std::vector<double> &,
-                std::vector<double>)> > & functions
+        , const ProcessingFunctions & functions
         );
 
+ProcessingFunctions createProcessingFunctions();
 
-std::map<std::string,
-    std::function<std::vector<double>(
-        const std::vector<double> &,
-        std::vector<double>
-    )>> createProcessingFunctions();
+/// @brief Convenience function. Behaves like
+///   @code
+///     processSamples( samples, instructions, createProcessingFunctions() );
+///   @endcode
+std::vector<double> processSamples(
+        std::vector<double> samples
+        , const std::string & instructions
+        );
 
 } // namespace dimf

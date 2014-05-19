@@ -74,4 +74,7 @@ void iterateMembers( OptimizationParams & params, F && f )
 std::vector<std::vector<double> > runOptimization(
         const OptimizationParams & params );
 
+std::vector<double> getPreprocessedSamples(
+        const OptimizationParams & params );
+
 } // namespace dimf

@@ -25,10 +25,7 @@ std::vector<std::vector<double> > runOptimization(
     auto currentImf = size_t{0};
 
     const auto processingFunctions = createProcessingFunctions();
-    const auto samples = processSamples(
-                params.samples,
-                params.preprocessing,
-                processingFunctions );
+    const auto samples = getPreprocessedSamples( params );
     auto imfs = std::vector<std::vector<double> >{};
     auto bestParamSets = std::vector<std::vector<double> >{};
 
@@ -180,5 +177,17 @@ std::vector<std::vector<double> > runOptimization(
     } // while loop
     return imfs;
 }
+
+
+std::vector<double> getPreprocessedSamples(
+        const OptimizationParams & params )
+{
+    const auto processingFunctions = createProcessingFunctions();
+    return processSamples(
+        params.samples,
+        params.preprocessing,
+        processingFunctions );
+}
+
 
 } // namespace dimf
