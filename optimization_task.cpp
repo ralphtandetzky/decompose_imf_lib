@@ -17,7 +17,8 @@ namespace dimf
 
 //void OptimizationTask::start( OptimizationParams params )
 std::vector<std::vector<double> > runOptimization(
-        const OptimizationParams & params )
+        const OptimizationParams & params,
+        std::ostream & os )
 {
     using cu::pi;
 
@@ -35,7 +36,7 @@ std::vector<std::vector<double> > runOptimization(
     while ( !done )
     {
         const auto oldImf = currentImf;
-        std::cout << "Optimizing IMF " << currentImf << "." << std::endl;
+        os << "Optimizing IMF " << currentImf << "." << std::endl;
         auto f = samples;
         f = processSamples( f,
                 params.interprocessing,

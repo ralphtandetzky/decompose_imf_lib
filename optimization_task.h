@@ -72,7 +72,8 @@ void iterateMembers( OptimizationParams & params, F && f )
 
 
 std::vector<std::vector<double> > runOptimization(
-        const OptimizationParams & params );
+        const OptimizationParams & params,
+        std::ostream & os );
 
 std::vector<double> getPreprocessedSamples(
         const OptimizationParams & params );
