@@ -15,7 +15,6 @@
 namespace dimf
 {
 
-//void OptimizationTask::start( OptimizationParams params )
 std::vector<std::vector<double> > runOptimization(
         const OptimizationParams & params,
         std::ostream & os )
